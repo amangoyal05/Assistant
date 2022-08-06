@@ -1,20 +1,19 @@
 import speech_recognition as sr
-import pyttsx3
+import pyttsx3, requests, wikipedia, pyjokes
 from datetime import datetime
-import requests
 from bs4 import BeautifulSoup
-import wikipedia
+from serpapi import GoogleSearch
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 r = sr.Recognizer()
 
 engine = pyttsx3.init()
 if('5:00:00'<current_time<'12:00:00'):
-    engine.say("Good morning master. How may I help you?")
+    engine.say("Good morning. How may I help you?")
 elif('12:00:01'<current_time<'17:00:00'):
-    engine.say("Good afternoon master. How may I help you?")
+    engine.say("Good afternoon. How may I help you?")
 elif('17:00:01'<current_time<'20:00:00'):
-    engine.say("Good evening master. How may I help you?")
+    engine.say("Good evening. How may I help you?")
 else:
     engine.say("Yes master. How may I help you?")
 engine.runAndWait()
@@ -56,13 +55,21 @@ with sr.Microphone() as source:
                 data = str.split('\n')
                 time = data[0]
                 sky = data[1]
+                print("Temperature is" + temp)
+                print("Time: " + time)
+                print("Sky Description: " + sky)
                 SpeakText("Temperature is" + temp)
                 SpeakText("Time: " + time)
                 SpeakText("Sky Description: " + sky)
-        elif "search":
+        elif (MySpeech == 'search'):
             speech = r.recognize_google(audio)
             search(speech)
-        elif "exit":
+        #elif "google":
+    
+        elif "tell" or "joke":
+            joke = pyjokes.get_joke(language="en", category="neutral")
+            SpeakText(joke)
+        elif "shutdown":
             break
         else:
             SpeakText("I am sorry I was unable to understand it. Can you please repeat it?")
